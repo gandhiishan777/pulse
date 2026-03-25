@@ -12,7 +12,10 @@ export default async function SiteDashboardPage(props: Props) {
   const siteId = params.siteId;
   const days = 30;
   
-  const site = await getSiteById(adminClient, siteId).catch(() => null);
+  const site = await getSiteById(adminClient, siteId).catch((err) => {
+    console.error('[SiteDashboardPage] getSiteById threw:', err);
+    return null;
+  });
 
   if (!site) return <div className="p-8">Site not found</div>;
 

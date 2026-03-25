@@ -30,12 +30,16 @@ export async function getSiteById(
   supabase: ServerSupabaseClient,
   siteId: string
 ): Promise<Site> {
+  console.log('[getSiteById] querying site_id:', siteId);
+
   const { data, error } = await supabase
     .from('sites')
     .select('*')
     .eq('id', siteId)
     .is('deleted_at', null)
     .single();
+
+  console.log('[getSiteById] response:', { data, error });
 
   if (error) throw error;
   return data;
