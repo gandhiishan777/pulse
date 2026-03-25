@@ -1,12 +1,9 @@
 import { ReactNode } from "react";
 import Link from "next/link";
-import { createClient } from "@/lib/supabase/server";
-import { getUserSites } from "@/lib/queries/sites";
-import { redirect } from "next/navigation";
+
+const HARDCODED_SITE_DOMAIN = 'acme.com';
 
 export default async function DashboardLayout({ children }: { children: ReactNode }) {
-  const supabase = await createClient();
-  const sites = await getUserSites(supabase).catch(() => []);
 
   return (
     <div className="min-h-screen bg-background text-on-surface pt-0">
@@ -50,13 +47,11 @@ export default async function DashboardLayout({ children }: { children: ReactNod
           </div>
         </div>
         <div className="flex items-center gap-4">
-          {sites.length > 0 && (
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container-low text-on-surface-variant text-xs font-semibold uppercase tracking-wider">
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container-low text-on-surface-variant text-xs font-semibold uppercase tracking-wider">
               <span className="text-primary">24h</span>
               <span className="w-px h-3 bg-outline-variant"></span>
-              <span>Project: {sites[0].domain}</span>
+              <span>Project: {HARDCODED_SITE_DOMAIN}</span>
             </div>
-          )}
           <div className="flex items-center gap-3">
              <span className="material-symbols-outlined text-outline">account_circle</span>
           </div>

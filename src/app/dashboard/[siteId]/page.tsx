@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { adminClient } from "@/lib/supabase/admin";
 import { getSummaryStats } from "@/lib/queries/daily-stats";
 import { getTopPages, getTopReferrers, getBrowserBreakdown, getCountryBreakdown } from "@/lib/queries/events";
 import { getSiteById } from "@/lib/queries/sites";
@@ -12,17 +12,16 @@ export default async function SiteDashboardPage(props: Props) {
   const siteId = params.siteId;
   const days = 30;
   
-  const supabase = await createClient();
-  const site = await getSiteById(supabase, siteId).catch(() => null);
-  
+  const site = await getSiteById(adminClient, siteId).catch(() => null);
+
   if (!site) return <div className="p-8">Site not found</div>;
-  
+
   const [summaryStats, topPages, referrers, browsers, countries] = await Promise.all([
-    getSummaryStats(supabase, siteId, days),
-    getTopPages(supabase, siteId, days, 6),
-    getTopReferrers(supabase, siteId, days, 5),
-    getBrowserBreakdown(supabase, siteId, days),
-    getCountryBreakdown(supabase, siteId, days),
+    getSummaryStats(adminClient, siteId, days),
+    getTopPages(adminClient, siteId, days, 6),
+    getTopReferrers(adminClient, siteId, days, 5),
+    getBrowserBreakdown(adminClient, siteId, days),
+    getCountryBreakdown(adminClient, siteId, days),
   ]);
 
   const formatNum = (n: number) => n >= 1000000 ? (n/1000000).toFixed(1) + 'M' : n >= 1000 ? (n/1000).toFixed(1) + 'K' : n;
